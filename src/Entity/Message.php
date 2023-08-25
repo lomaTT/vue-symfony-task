@@ -88,6 +88,7 @@ class Message
         $metadata->addPropertyConstraint('email', new Assert\Email([
             'message' => 'The email "{{ value }}" is not a valid email.',
         ]));
+        $metadata->addPropertyConstraint('email', new NotBlank());
         $metadata->addPropertyConstraint('text', new NotBlank());
     }
 }

@@ -1,22 +1,25 @@
 <script setup>
+    
     import axios from 'axios';
     defineProps({
         isSubmitted: Boolean,
     });
 
-    const validate = (name, surname, email, message) => {
-        if (name && surname && message && email && email.match(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g)) {
+    const validateEmail = (email) => {
+        if (email.match(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g)) return true;
+        return false;
+    }
+
+    const validateForm = (name, surname, email, message) => {
+        if (name && surname && message && email && validateEmail(email)) {
             axios.post('/home', {
                 name: name,
                 surname: surname,
                 email: email,
                 message: message
             })
-            .then(function (response) {
-                console.log(response);
-            })
             .catch(function (error) {
-                console.log(error);
+                return false;
             });
             return true;
         }
@@ -30,18 +33,17 @@
         <div class="input-form">
             <form method="post">
                 <label for="name">Imie:</label><br>
-                <input type="text" id="name" name="name" v-model="name" required><br>
+                <input type="text" id="name" name="name" v-model="name" required maxlength="255"><br>
 
                 <label for="surname">Nazwisko:</label><br>
-                <input type="text" id="surname" name="surname" v-model="surname" required><br>
+                <input type="text" id="surname" name="surname" v-model="surname" required maxlength="255"><br>
 
                 <label for="email">E-mail:</label><br>
-                <input type="email" id="email" name="email" v-model="email" required><br>
+                <input type="email" id="email" name="email" v-model="email" required maxlength="255"><br>
 
                 <label for="message">Treść:</label><br>
-                <input type="text" id="message" name="message" v-model="message" required><br>
-                {{ name }}
-                <input type="submit" value="Submit" @click="validate(name, surname, email, message) ? $emit('submit', !isSubmitted) : ``">
+                <input type="text" id="message" name="message" v-model="message" required maxlength="1000"><br>
+                <input type="submit" value="Submit" @click="validateForm(name, surname, email, message) ? $emit('submit', !isSubmitted) : ``">
             </form>
         </div>
         

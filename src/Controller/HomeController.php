@@ -29,11 +29,37 @@ class HomeController extends AbstractController
         $message = new Message();
 
         $data = $request->toArray();
+        if (!isset($data['name'])) {
+            $data['name'] = '';
+        }
+        if (!isset($data['surname'])) {
+            $data['surname'] = '';
+        }
+        if (!isset($data['email'])) {
+            $data['email'] = '';
+        }
+        if (!isset($data['message'])) {
+            $data['message'] = '';
+        }
+
+        if (strlen($data['name']) > 255) {
+            return new JsonResponse('Name is too long, please use less than 255 symbols.', Response::HTTP_BAD_REQUEST, [], false);
+        }
+        if (strlen($data['surname']) > 255) {
+            return new JsonResponse('Surname is too long, please use less than 255 symbols.', Response::HTTP_BAD_REQUEST, [], false);
+        }
+        if (strlen($data['email']) > 255) {
+            return new JsonResponse('Email is so long, please use less than 255 symbols.', Response::HTTP_BAD_REQUEST, [], false);
+        }
+        if (strlen($data['message']) > 1000) {
+            return new JsonResponse('Text is so long, please use less than 255 symbols.', Response::HTTP_BAD_REQUEST, [], false);
+        }
+
+
         $message->setName($data['name']);
         $message->setSurname($data['surname']);
         $message->setEmail($data['email']);
         $message->setText($data['message']);
-
 
         $errors = $validator->validate($message);
 
@@ -44,7 +70,7 @@ class HomeController extends AbstractController
             return new JsonResponse($data, Response::HTTP_CREATED, [], true);
         } else {
             $data = $serializer->serialize($message, JsonEncoder::FORMAT);
-            return new JsonResponse($errors, 500, [], true);
+            return new JsonResponse($errors, Response::HTTP_BAD_REQUEST, [], true);
         }
     }
 }

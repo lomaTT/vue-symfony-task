@@ -21,8 +21,11 @@
     },
     "dependencies": {
         "axios": "^1.4.0",
+        "vee-validate": "^4.11.3",
+        "vform": "^2.1.2",
         "vue": "^3.3.4",
         "vue-loader": "^17.2.2",
-        "vue-template-compiler": "^2.7.14"
+        "vue-template-compiler": "^2.7.14",
+        "yup": "^1.2.0"
     }
 }
