@@ -19,6 +19,7 @@
                 message: message
             })
             .catch(function (error) {
+                alert('Error!', error.message);
                 return false;
             });
             return true;
